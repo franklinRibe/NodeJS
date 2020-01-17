@@ -1,4 +1,4 @@
-import React from 'react';
+import React , { useState, useEffect } from 'react';
 // Componente: Bloco isolado de HTML, CSS e JS o qual nao interfere no restante da aplicacao
 // Propriedade: Informações que o componente pai passa para o componente filho
 // Estado: Informaçoes mantidas pelo componente (lembrar: imutabilidade)
@@ -9,6 +9,22 @@ import './sidebar.css';
 import './main.css';
 
 function App() {
+  const [latitude, setLatitude] = useState('');
+  const [longitude, setLongitude] = useState(''); 
+  useEffect(() => {
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        const { latitude, longitude } = position.coords;
+        setLatitude(latitude);
+        setLongitude(longitude);
+      },
+      (err) =>{
+        console.log(err);
+      },{
+        timeout: 30000,
+      } 
+    )
+  }, []);
 
   return (
     <div id="app">
@@ -27,11 +43,26 @@ function App() {
             <div className="input-group">
               <div className="input-block">
                   <label htmlFor="latitude">Latitude</label>
-                  <input name="latitude" id="latitude" required></input>
+                  <input 
+                    type="number" 
+                    name="latitude" 
+                    id="latitude" 
+                    required 
+                    value={latitude}
+                    onChange={e => setLatitude(e.target.value)}
+                  >    
+                  </input>
               </div>
               <div className="input-block">
-                <label htmlFor="longitude">Longitude</label>
-                <input name="longitude" id="longitude" required></input>
+                  <label htmlFor="longitude">Longitude</label>
+                  <input 
+                    type="number" 
+                    name="longitude" 
+                    id="longitude" 
+                    required value={longitude}
+                    onChange={e => setLongitude(e.target.value)}
+                  >
+                  </input>
               </div>
             </div>
           
